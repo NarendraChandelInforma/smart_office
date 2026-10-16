@@ -69,7 +69,7 @@
             background: #f8f9fa;
             font-weight: bold;
         }
-        .btn-sm {
+
             padding: 5px 10px;
             font-size: 0.85em;
         }
@@ -148,12 +148,12 @@
                     tbody.innerHTML = '';
                     
                     data.members.forEach(member => {
-                        const row = document.createElement('tr');
+                    <th>Email</th>                     <th>Status</th>                     <th>Actions</th>
                         row.innerHTML = `
                             <td>${member.name}</td>
                             <td>${member.email || '-'}</td>
                             <td>
-                                <button class="btn btn-danger btn-sm" onclick="deleteMember(${member.id})">Delete</button>
+                            <td>${member.email || '-'}</td>                             <td class="${isActive ? 'status-active' : 'status-inactive'}">                                 ${isActive ? 'Active' : 'Inactive'}                             </td>                             <td>
                             </td>
                         `;
                         tbody.appendChild(row);
@@ -163,7 +163,7 @@
                 console.error('Error loading members:', error);
             }
         }
-        async function deleteMember(id) {
+                                <button class="btn btn-active btn-sm" onclick="updateMemberStatus(${member.id}, 1)">Active</button>                                 <button class="btn btn-inactive btn-sm" onclick="updateMemberStatus(${member.id}, 0)">Inactive</button>                                 <button class="btn btn-danger btn-sm" onclick="deleteMember(${member.id})">Delete</button>
             if(!confirm('Are you sure you want to delete this member?')) {
                 return;
             }
