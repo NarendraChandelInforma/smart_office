@@ -119,7 +119,7 @@
             formData.append('email', document.getElementById('memberEmail').value);
             
             try {
-                const response = await fetch('team_api.php', {
+                const response = await fetch('ajax/team_api.php', {
                     method: 'POST',
                     body: formData
                 });
@@ -142,7 +142,7 @@
             try {
                 const response = await fetch('ajax/team_api.php?action=get_members');
                 const data = await response.json();
-                alert(data);
+                
                 if(data.success) {
                     const tbody = document.getElementById('membersList');
                     tbody.innerHTML = '';
@@ -173,7 +173,7 @@
             formData.append('id', id);
             
             try {
-                const response = await fetch('team_api.php', {
+                const response = await fetch('ajax/team_api.php', {
                     method: 'POST',
                     body: formData
                 });
