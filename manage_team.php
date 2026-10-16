@@ -69,9 +69,23 @@
             background: #f8f9fa;
             font-weight: bold;
         }
-
+        .status-active {
+            color: #198754;
+            font-weight: bold;
+        }
+        .status-inactive {
+            color: #6c757d;
+            font-weight: bold;
+        }
+        .btn-sm {
             padding: 5px 10px;
             font-size: 0.85em;
+        }
+        .btn-active {
+            background: #198754;
+        }
+        .btn-inactive {
+            background: #6c757d;
         }
         .btn-danger {
             background: #dc3545;
@@ -101,6 +115,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Email</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -142,18 +157,23 @@
             try {
                 const response = await fetch('ajax/team_api.php?action=get_members');
                 const data = await response.json();
-                
                 if(data.success) {
                     const tbody = document.getElementById('membersList');
                     tbody.innerHTML = '';
                     
                     data.members.forEach(member => {
-                    <th>Email</th>                     <th>Status</th>                     <th>Actions</th>
+                        const row = document.createElement('tr');
+                        const isActive = Number(member.status) === 1;
                         row.innerHTML = `
                             <td>${member.name}</td>
                             <td>${member.email || '-'}</td>
+                            <td class="${isActive ? 'status-active' : 'status-inactive'}">
+                                ${isActive ? 'Active' : 'Inactive'}
+                            </td>
                             <td>
-                            <td>${member.email || '-'}</td>                             <td class="${isActive ? 'status-active' : 'status-inactive'}">                                 ${isActive ? 'Active' : 'Inactive'}                             </td>                             <td>
+                                <button class="btn btn-active btn-sm" onclick="updateMemberStatus(${member.id}, 1)">Active</button>
+                                <button class="btn btn-inactive btn-sm" onclick="updateMemberStatus(${member.id}, 0)">Inactive</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteMember(${member.id})">Delete</button>
                             </td>
                         `;
                         tbody.appendChild(row);
@@ -163,7 +183,30 @@
                 console.error('Error loading members:', error);
             }
         }
-                                <button class="btn btn-active btn-sm" onclick="updateMemberStatus(${member.id}, 1)">Active</button>                                 <button class="btn btn-inactive btn-sm" onclick="updateMemberStatus(${member.id}, 0)">Inactive</button>                                 <button class="btn btn-danger btn-sm" onclick="deleteMember(${member.id})">Delete</button>
+        async function updateMemberStatus(id, status) {
+            const formData = new FormData();
+            formData.append('action', 'update_status');
+            formData.append('id', id);
+            formData.append('status', status);
+
+            try {
+                const response = await fetch('ajax/team_api.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+
+                if(data.success) {
+                    loadMembers();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch(error) {
+                console.error('Error updating member status:', error);
+                alert('Error updating member status');
+            }
+        }
+        async function deleteMember(id) {
             if(!confirm('Are you sure you want to delete this member?')) {
                 return;
             }
