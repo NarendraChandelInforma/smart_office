@@ -1,0 +1,12 @@
+# Prevent direct access to config.php
+<Files "config.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Enable error logging (disable display)
+php_flag display_errors off
+php_flag log_errors on
+
+# Set default charset
+AddDefaultCharset UTF-8
