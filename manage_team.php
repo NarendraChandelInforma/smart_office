@@ -173,7 +173,6 @@
                             <td>
                                 <button class="btn btn-active btn-sm" onclick="updateMemberStatus(${member.id}, 1)">Active</button>
                                 <button class="btn btn-inactive btn-sm" onclick="updateMemberStatus(${member.id}, 0)">Inactive</button>
-                                <button class="btn btn-danger btn-sm" onclick="deleteMember(${member.id})">Delete</button>
                             </td>
                         `;
                         tbody.appendChild(row);
@@ -204,34 +203,6 @@
             } catch(error) {
                 console.error('Error updating member status:', error);
                 alert('Error updating member status');
-            }
-        }
-        async function deleteMember(id) {
-            if(!confirm('Are you sure you want to delete this member?')) {
-                return;
-            }
-            
-            const formData = new FormData();
-            formData.append('action', 'delete_member');
-            formData.append('id', id);
-            
-            try {
-                const response = await fetch('ajax/team_api.php', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const data = await response.json();
-                
-                if(data.success) {
-                    alert('Member deleted successfully!');
-                    loadMembers();
-                } else {
-                    alert('Error: ' + data.message);
-                }
-            } catch(error) {
-                console.error('Error:', error);
-                alert('Error deleting member');
             }
         }
     </script>
